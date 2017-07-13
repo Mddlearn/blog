@@ -1,0 +1,68 @@
+{% extends 'blog/base.html' %}
+
+
+{% block main %}
+            
+                <article class="post post-{{ post.pk }}">
+                    <header class="entry-header">
+                        <h1 class="entry-title">
+                            {{ post.title }}
+                        </h1>
+                        <div class="entry-meta">
+                            <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
+                            <span class="post-date"><a href="#"><time class="entry-date"
+                                                                      datetime="2012-11-09T23:15:57+00:00">{{post.created_time}}</time></a></span>
+                            <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                            <span class="comments-link"><a href="#">{{ post.comment_set.count }} 评论</a></span>
+                            <span class="views-count"><a href="#">{{ post.views }} 阅读</a></span>
+                        </div>
+                    </header>
+                    <div class="entry-content clearfix">
+                        <p>{{ post.body | safe }}</p>
+                    </div>
+                </article>
+                <form action="{% url 'comments:post_comment' post.pk %}" method="post" class="commentform">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="{{ form.name.id_for_label }}">名字</label>
+                            {{ form.name }}
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label for="{{ form.email.id_for_label }}">邮箱</label>
+                            {{ form.email }}
+                        </div><br>
+                        <hr>
+                        <div class="col-md-12">
+                            <label for="{{ form.text.id_for_label }}">评论</label>
+                            {{ form.text }}
+                            <button type="submit" class="comment-btn">发表</button>
+                        </div>
+                        
+                    </div>
+                </form>
+                <ul>
+                    {% for comment in comment_list %}
+                    
+                    <li class="comment-item">
+                                <span class="nickname">{{ comment.name }}</span>
+                                <time class="submit-date" datetime="2012-11-09T23:15:57+00:00">{{ comment.created_time }}</time>
+                                <div class="text">
+                                    {{ comment.text }}
+                                </div>
+                            </li>
+                    {% endfor %}
+                </ul>
+            
+
+                
+                <!-- 简单分页效果
+                <div class="pagination-simple">
+                    <a href="#">上一页</a>
+                    <span class="current">第 6 页 / 共 11 页</span>
+                    <a href="#">下一页</a>
+                </div>
+                -->
+                
+{% endblock %}
